@@ -28,7 +28,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       'orderNumber': '876543',
       'date': '01/06/25',
       'total': 100.00,
-      'status': 'Delivered',
+      'status': 'Completed',
       'image':
           'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=70&h=93&fit=crop',
     },
@@ -36,7 +36,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       'orderNumber': '234567',
       'date': '01/06/25',
       'total': 100.00,
-      'status': 'Delivered',
+      'status': 'Completed',
       'image':
           'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=70&h=93&fit=crop',
     },
@@ -44,7 +44,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       'orderNumber': '987654',
       'date': '01/06/25',
       'total': 100.00,
-      'status': 'Delivered',
+      'status': 'Completed',
       'image':
           'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=70&h=93&fit=crop',
     },
@@ -52,7 +52,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       'orderNumber': '123456',
       'date': '01/06/25',
       'total': 100.00,
-      'status': 'Delivered',
+      'status': 'Completed',
       'image':
           'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=70&h=93&fit=crop',
     },

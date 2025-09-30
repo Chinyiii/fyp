@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/services/WishlistService.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -43,8 +45,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     '1': 5,
   };
 
+  String _formatPrice(dynamic price) {
+    if (price is String) {
+      return price;
+    } else if (price is double) {
+      return 'RM ${price.toStringAsFixed(2)}';
+    } else if (price is int) {
+      return 'RM ${price.toDouble().toStringAsFixed(2)}';
+    }
+    return 'Price not available';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final wishlistService = Provider.of<WishlistService>(context);
+    final isInWishlist = wishlistService.isInWishlist(widget.product);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
@@ -70,6 +86,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isInWishlist ? Icons.favorite : Icons.favorite_border,
+              color: isInWishlist ? Colors.red : const Color(0xFF141414),
+            ),
+            onPressed: () {
+              if (isInWishlist) {
+                wishlistService.removeFromWishlist(widget.product);
+              } else {
+                wishlistService.addToWishlist(widget.product);
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -106,7 +137,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Text(
-                widget.product['price'],
+                _formatPrice(widget.product['price']),
                 style: const TextStyle(
                   fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
@@ -191,14 +222,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: const Text(
-                'Ratings & Reviews',
-                style: TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                  color: Color(0xFF141414),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Ratings & Reviews',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: Color(0xFF141414),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/rating-review',
+                        arguments: {'product': widget.product},
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF000000),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Text(
+                        'Write Review',
+                        style: TextStyle(
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Color(0xFFFAFAFA),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 

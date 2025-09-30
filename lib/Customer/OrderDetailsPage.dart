@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/Customer/RatingAndReviewPage.dart';
 
 class OrderDetailsPage extends StatefulWidget {
   final Map<String, dynamic> order;
@@ -273,7 +274,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
     );
   }
 
-  Widget _buildActionButtons() {
+   Widget _buildActionButtons() {
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFFFAFAFA),
@@ -336,6 +337,39 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: Color(0xFF141414),
+                    ),
+                  ),
+                ),
+              ),
+              if (widget.order['status'] == 'Completed')
+                const SizedBox(height: 12),
+              if (widget.order['status'] == 'Completed')
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RatingAndReviewPage(order: widget.order),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Rate and Review',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: Color(0xFFFAFAFA),
                     ),
                   ),
                 ),

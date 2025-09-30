@@ -37,6 +37,26 @@ class _MainPageState extends State<MainPage> {
                 margin: const EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
+                    Navigator.pushNamed(context, '/wishlist');
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F5F5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.favorite_border,
+                      color: Color(0xFF1A1A1A),
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
                     Navigator.pushNamed(context, '/cart');
                   },
                   child: Container(
@@ -95,7 +115,7 @@ class _MainPageState extends State<MainPage> {
                 // Enhanced Search Bar
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/products');
+                    Navigator.pushNamed(context, '/search');
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(
@@ -523,7 +543,7 @@ class _MainPageState extends State<MainPage> {
 
         // Navigate to different pages based on selection
         if (index == 0) {
-          Navigator.pushNamed(context, '/products');
+          Navigator.pushNamed(context, '/search');
         } else if (index == 1) {
           Navigator.pushNamed(context, '/orders');
         } else if (index == 3) {
