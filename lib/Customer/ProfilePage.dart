@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/Customer/BottomNavBar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -70,16 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAFAFA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF141414),
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -91,132 +83,98 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // User Avatar and Name
+            Container(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // User Avatar and Name
+                  // Avatar
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        // Avatar
-                        Container(
-                          width: 128,
-                          height: 128,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(64),
-                            image: const DecorationImage(
-                              image: NetworkImage(
-                                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&crop=face',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                    width: 128,
+                    height: 128,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(64),
+                      image: const DecorationImage(
+                        image: NetworkImage(
+                          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&crop=face',
                         ),
-                        const SizedBox(height: 16),
-                        // Name
-                        Text(
-                          'Lim Chin Yi',
-                          style: const TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22,
-                            color: Color(0xFF141414),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // User Information Section
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'User Information',
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                          color: Color(0xFF141414),
-                        ),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-
-                  // Information Fields
-                  _buildInfoField(
-                    'First Name',
-                    _userInfo['firstName']!,
-                    () => _handleEditField('First Name'),
+                  const SizedBox(height: 16),
+                  // Name
+                  Text(
+                    'Lim Chin Yi',
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                      color: Color(0xFF141414),
+                    ),
                   ),
-                  _buildInfoField(
-                    'Last Name',
-                    _userInfo['lastName']!,
-                    () => _handleEditField('Last Name'),
-                  ),
-                  _buildInfoField(
-                    'Email',
-                    _userInfo['email']!,
-                    () => _handleEditField('Email'),
-                  ),
-                  _buildInfoField(
-                    'Phone Number',
-                    _userInfo['phone']!,
-                    () => _handleEditField('Phone Number'),
-                  ),
-                  _buildInfoField(
-                    'Address',
-                    _userInfo['address']!,
-                    () => _handleEditField('Address'),
-                  ),
-                  _buildInfoField(
-                    'Password',
-                    _userInfo['password']!,
-                    () => _handleEditField('Password'),
-                  ),
-
-                  // Bottom spacing
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
-          ),
 
-          // Bottom Navigation Bar
-          Container(
-            decoration: const BoxDecoration(
-              color: Color(0xFFFAFAFA),
-              border: Border(
-                top: BorderSide(color: Color(0xFFEDEDED), width: 1),
-              ),
-            ),
-            child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildNavItem(Icons.search, 'Search', '/products', false),
-                    _buildNavItem(
-                      Icons.shopping_bag,
-                      'Orders',
-                      '/orders',
-                      false,
-                    ),
-                    _buildNavItem(Icons.home, 'Home', '/home', false),
-                    _buildNavItem(Icons.person, 'Profile', '/profile', true),
-                  ],
+            // User Information Section
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'User Information',
+                  style: TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    color: Color(0xFF141414),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+
+            // Information Fields
+            _buildInfoField(
+              'First Name',
+              _userInfo['firstName']!,
+              () => _handleEditField('First Name'),
+            ),
+            _buildInfoField(
+              'Last Name',
+              _userInfo['lastName']!,
+              () => _handleEditField('Last Name'),
+            ),
+            _buildInfoField(
+              'Email',
+              _userInfo['email']!,
+              () => _handleEditField('Email'),
+            ),
+            _buildInfoField(
+              'Phone Number',
+              _userInfo['phone']!,
+              () => _handleEditField('Phone Number'),
+            ),
+            _buildInfoField(
+              'Address',
+              _userInfo['address']!,
+              () => _handleEditField('Address'),
+            ),
+            _buildInfoField(
+              'Password',
+              _userInfo['password']!,
+              () => _handleEditField('Password'),
+            ),
+
+            // Bottom spacing
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
+      bottomNavigationBar: const BottomNavBar(currentRoute: '/profile'),
     );
   }
 

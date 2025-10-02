@@ -1,3 +1,4 @@
+import 'package:fyp/Customer/BottomNavBar.dart';
 import 'package:flutter/material.dart';
 
 class ProductPage extends StatefulWidget {
@@ -8,7 +9,6 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  int _selectedIndex = 0; // Search is selected by default
   String _selectedFilter = 'Featured';
 
   final List<String> _filterOptions = [
@@ -64,16 +64,7 @@ class _ProductPageState extends State<ProductPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAFAFA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF141414),
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           'Sneakers',
           style: TextStyle(
@@ -215,26 +206,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFFAFAFA),
-          border: Border(top: BorderSide(color: Color(0xFFEDEDED), width: 1)),
-        ),
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Icons.search, 'Search', 0),
-                _buildNavItem(Icons.shopping_bag_outlined, 'Orders', 1),
-                _buildNavItem(Icons.home_outlined, 'Home', 2),
-                _buildNavItem(Icons.person_outline, 'Profile', 3),
-              ],
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: const BottomNavBar(currentRoute: '/products'),
     );
   }
 
@@ -297,60 +269,6 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-
-        // Navigate to different pages based on selection
-        if (index == 2) {
-          Navigator.pushReplacementNamed(context, '/home');
-        } else if (index == 1) {
-          Navigator.pushNamed(context, '/orders');
-        } else if (index == 3) {
-          Navigator.pushNamed(context, '/profile');
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xFF141414)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(27),
-              ),
-              child: Icon(
-                icon,
-                color: isSelected ? Colors.white : const Color(0xFF737373),
-                size: 24,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: isSelected
-                    ? const Color(0xFF141414)
-                    : const Color(0xFF737373),
               ),
             ),
           ],

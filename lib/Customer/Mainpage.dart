@@ -1,14 +1,8 @@
+import 'package:fyp/Customer/BottomNavBar.dart';
 import 'package:flutter/material.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   const MainPage({super.key});
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 2; // Home is selected by default
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +16,7 @@ class _MainPageState extends State<MainPage> {
             elevation: 0,
             floating: true,
             snap: true,
+            automaticallyImplyLeading: false,
             title: const Text(
               'Home',
               style: TextStyle(
@@ -75,33 +70,38 @@ class _MainPageState extends State<MainPage> {
               ),
               Container(
                 margin: const EdgeInsets.only(right: 20),
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.notifications_outlined,
-                        color: Color(0xFF1A1A1A),
-                        size: 24,
-                      ),
-                    ),
-                    Positioned(
-                      right: 6,
-                      top: 6,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/notifications');
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.notifications_outlined,
                           color: Color(0xFF1A1A1A),
-                          shape: BoxShape.circle,
+                          size: 24,
                         ),
                       ),
-                    ),
-                  ],
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF1A1A1A),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -285,6 +285,7 @@ class _MainPageState extends State<MainPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
                       _buildProductCard(
+                        context,
                         'Air Max 90',
                         'RM 300.00',
                         'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=200&h=240&fit=crop',
@@ -292,6 +293,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'Air Force 1',
                         'RM 250.00',
                         'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=240&fit=crop',
@@ -299,6 +301,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'Jordan 1',
                         'RM 510.00',
                         'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=240&fit=crop',
@@ -306,6 +309,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'Dunk Low',
                         'RM 400.00',
                         'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=200&h=240&fit=crop',
@@ -328,6 +332,7 @@ class _MainPageState extends State<MainPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
                       _buildProductCard(
+                        context,
                         'Blazer Mid',
                         'RM 450.00',
                         'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=240&fit=crop',
@@ -335,6 +340,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'Air Max 97',
                         'RM 540.00',
                         'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=200&h=240&fit=crop',
@@ -342,6 +348,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'React Element',
                         'RM 380.00',
                         'https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=200&h=240&fit=crop',
@@ -349,11 +356,60 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(width: 16),
                       _buildProductCard(
+                        context,
                         'Air Zoom',
                         'RM 420.00',
                         'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=200&h=240&fit=crop',
                         false,
                       ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                _buildSectionHeader('Shop by Category', () {
+                  Navigator.pushNamed(context, '/categories');
+                }),
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      _buildCategoryChip(context, 'Running'),
+                      const SizedBox(width: 12),
+                      _buildCategoryChip(context, 'Basketball'),
+                      const SizedBox(width: 12),
+                      _buildCategoryChip(context, 'Lifestyle'),
+                      const SizedBox(width: 12),
+                      _buildCategoryChip(context, 'Skateboarding'),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                _buildSectionHeader('Shop by Brand', () {
+                  Navigator.pushNamed(context, '/brands');
+                }),
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 100,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      _buildBrandLogo(context, 'Nike', ''),
+                      const SizedBox(width: 16),
+                      _buildBrandLogo(context, 'Adidas', ''),
+                      const SizedBox(width: 16),
+                      _buildBrandLogo(context, 'Puma', ''),
+                      const SizedBox(width: 16),
+                      _buildBrandLogo(context, 'Reebok', ''),
                     ],
                   ),
                 ),
@@ -364,37 +420,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(13),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Icons.search_outlined, Icons.search, 'Search', 0),
-                _buildNavItem(
-                  Icons.shopping_bag_outlined,
-                  Icons.shopping_bag,
-                  'Orders',
-                  1,
-                ),
-                _buildNavItem(Icons.home_outlined, Icons.home, 'Home', 2),
-                _buildNavItem(Icons.person_outline, Icons.person, 'Profile', 3),
-              ],
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: const BottomNavBar(currentRoute: '/home'),
     );
   }
 
@@ -431,11 +457,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildProductCard(
-    String name,
-    String price,
-    String imageUrl,
-    bool isFavorite,
-  ) {
+      BuildContext context,
+      String name,
+      String price,
+      String imageUrl,
+      bool isFavorite,
+      ) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -528,59 +555,57 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildNavItem(
-    IconData outlinedIcon,
-    IconData filledIcon,
-    String label,
-    int index,
-  ) {
-    bool isSelected = _selectedIndex == index;
+  Widget _buildBrandLogo(
+      BuildContext context,
+      String brandName,
+      String logoUrl,
+      ) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-
-        // Navigate to different pages based on selection
-        if (index == 0) {
-          Navigator.pushNamed(context, '/search');
-        } else if (index == 1) {
-          Navigator.pushNamed(context, '/orders');
-        } else if (index == 3) {
-          Navigator.pushNamed(context, '/profile');
-        }
+        Navigator.pushNamed(context, '/brand-products', arguments: {'brandName': brandName});
       },
       child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xFF1A1A1A)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                isSelected ? filledIcon : outlinedIcon,
-                color: isSelected ? Colors.white : const Color(0xFF9E9E9E),
-                size: 24,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: isSelected
-                    ? const Color(0xFF1A1A1A)
-                    : const Color(0xFF9E9E9E),
-              ),
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(20),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
+        ),
+        child: Center(
+          child: Text(brandName), // Replace with Image.network(logoUrl) when you have real logos
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryChip(
+      BuildContext context,
+      String categoryName,
+      ) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/category-products', arguments: {'categoryName': categoryName});
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          categoryName,
+          style: const TextStyle(
+            fontFamily: 'Plus Jakarta Sans',
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            color: Color(0xFF1A1A1A),
+          ),
         ),
       ),
     );

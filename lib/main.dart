@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/Customer/Mainpage.dart';
-import 'package:fyp/Customer/ProductPage.dart';
-import 'package:fyp/Customer/ProductDetailPage.dart';
+import 'package:fyp/AppFirstPage.dart';
+import 'package:fyp/Customer/AboutPage.dart';
+import 'package:fyp/Customer/BrandsPage.dart';
 import 'package:fyp/Customer/CartPage.dart';
+import 'package:fyp/Customer/CategoriesPage.dart';
 import 'package:fyp/Customer/CheckoutPage.dart';
-import 'package:fyp/Customer/PaymentPage.dart';
+import 'package:fyp/Customer/EditInformationPage.dart';
+import 'package:fyp/Customer/HelpSupportPage.dart';
+import 'package:fyp/Customer/Mainpage.dart';
+import 'package:fyp/Customer/NotificationCenterPage.dart';
 import 'package:fyp/Customer/OrderConfirmationPage.dart';
-import 'package:fyp/Customer/OrderHistoryPage.dart';
 import 'package:fyp/Customer/OrderDetailsPage.dart';
+import 'package:fyp/Customer/OrderHistoryPage.dart';
+import 'package:fyp/Customer/PaymentPage.dart';
+import 'package:fyp/Customer/ProductDetailPage.dart';
+import 'package:fyp/Customer/ProductPage.dart';
+import 'package:fyp/Customer/ProfilePage.dart';
 import 'package:fyp/Customer/RatingAndReviewPage.dart';
 import 'package:fyp/Customer/ReviewConfirmationPage.dart';
-import 'package:fyp/AppFirstPage.dart';
 import 'package:fyp/Customer/SearchPage.dart';
+import 'package:fyp/Customer/SettingsPage.dart';
 import 'package:fyp/Customer/WishlistPage.dart';
 import 'package:fyp/Login/LoginPage.dart';
 import 'package:fyp/Login/RegisterPage.dart';
-import 'package:fyp/Login/ForgotPasswordPage.dart';
-import 'package:fyp/Customer/ProfilePage.dart';
-import 'package:fyp/Customer/EditInformationPage.dart';
-import 'package:fyp/services/WishlistService.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => WishlistService(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -43,58 +41,69 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Plus Jakarta Sans',
       ),
       home: const AppFirstPage(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/edit-information':
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) {
+                return EditInformationPage(
+                  fieldType: args['fieldType'],
+                  currentValue: args['currentValue'],
+                );
+              },
+            );
+          case '/rating-review':
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) {
+                return RatingAndReviewPage(
+                  order: args['order'],
+                );
+              },
+            );
+          default:
+            return null;
+        }
+      },
       routes: {
         '/home': (context) => const MainPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/forgot-password': (context) => const ForgotPasswordPage(),
-        '/wishlist': (context) => const WishlistPage(),
-        '/search': (context) => const SearchPage(),
         '/products': (context) => const ProductPage(),
         '/product-detail': (context) {
           final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return ProductDetailPage(product: args['product']);
         },
         '/cart': (context) => const CartPage(),
         '/checkout': (context) => const CheckoutPage(),
         '/payment': (context) {
           final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return PaymentPage(cartItems: args['cartItems']);
         },
         '/order-confirmation': (context) {
           final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return OrderConfirmationPage(cartItems: args['cartItems']);
         },
         '/orders': (context) => const OrderHistoryPage(),
         '/order-details': (context) {
           final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return OrderDetailsPage(order: args['order']);
         },
-        '/rating-review': (context) {
-          final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
-          return RatingAndReviewPage(order: args['order']);
-        },
-        '/review-confirmation': (context) => const ReviewConfirmationPage(),
         '/profile': (context) => const ProfilePage(),
-        '/edit-information': (context) {
-          final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>;
-          return EditInformationPage(
-            fieldType: args['fieldType'],
-            currentValue: args['currentValue'],
-          );
-        },
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/brands': (context) => BrandsPage(),
+        '/categories': (context) => CategoriesPage(),
+        '/wishlist': (context) => const WishlistPage(),
+        '/about': (context) => AboutPage(),
+        '/help': (context) => HelpSupportPage(),
+        '/notifications': (context) => NotificationCenterPage(),
+        '/review-confirmation': (context) => const ReviewConfirmationPage(),
+        '/search': (context) => const SearchPage(),
+        '/settings': (context) => SettingsPage(),
       },
     );
   }

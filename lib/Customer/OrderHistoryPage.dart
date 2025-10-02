@@ -1,3 +1,4 @@
+import 'package:fyp/Customer/BottomNavBar.dart';
 import 'package:flutter/material.dart';
 
 class OrderHistoryPage extends StatefulWidget {
@@ -9,7 +10,6 @@ class OrderHistoryPage extends StatefulWidget {
 
 class _OrderHistoryPageState extends State<OrderHistoryPage> {
   int _selectedIndex = 0; // 0 for Active, 1 for History
-  int _bottomNavIndex = 1; // Orders tab is selected
 
   // Sample order data - in real app this would come from order service
   final List<Map<String, dynamic>> activeOrders = [
@@ -69,16 +69,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAFAFA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF141414),
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           'Orders',
           style: TextStyle(
@@ -109,7 +100,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: const BottomNavBar(currentRoute: '/orders'),
     );
   }
 
@@ -323,114 +314,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFFAFAFA),
-        border: Border(top: BorderSide(color: Color(0xFFEDEDED), width: 1)),
-      ),
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              // Search
-              _buildNavItem(
-                icon: Icons.search,
-                label: 'Search',
-                index: 0,
-                isSelected: _bottomNavIndex == 0,
-              ),
-
-              // Orders
-              _buildNavItem(
-                icon: Icons.shopping_bag,
-                label: 'Orders',
-                index: 1,
-                isSelected: _bottomNavIndex == 1,
-              ),
-
-              // Home
-              _buildNavItem(
-                icon: Icons.home,
-                label: 'Home',
-                index: 2,
-                isSelected: _bottomNavIndex == 2,
-              ),
-
-              // Profile
-              _buildNavItem(
-                icon: Icons.person,
-                label: 'Profile',
-                index: 3,
-                isSelected: _bottomNavIndex == 3,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required IconData icon,
-    required String label,
-    required int index,
-    required bool isSelected,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _bottomNavIndex = index;
-        });
-
-        // Handle navigation
-        switch (index) {
-          case 0: // Search
-            Navigator.pushNamed(context, '/products');
-            break;
-          case 1: // Orders (current page)
-            // Already on orders page
-            break;
-          case 2: // Home
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/home',
-              (route) => false,
-            );
-            break;
-          case 3: // Profile
-            Navigator.pushNamed(context, '/profile');
-            break;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected ? Colors.black : const Color(0xFF737373),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: isSelected ? Colors.black : const Color(0xFF737373),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

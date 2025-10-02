@@ -245,3 +245,4 @@ class _EditInformationPageState extends State<EditInformationPage> {
     );
   }
 }
+
