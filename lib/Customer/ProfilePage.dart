@@ -20,6 +20,11 @@ class _ProfilePageState extends State<ProfilePage> {
   };
 
   void _handleEditField(String field) {
+    if (field == 'Address') {
+      Navigator.pushNamed(context, '/address-book');
+      return;
+    }
+
     String fieldKey = '';
     switch (field) {
       case 'First Name':
@@ -33,9 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
         break;
       case 'Phone Number':
         fieldKey = 'phone';
-        break;
-      case 'Address':
-        fieldKey = 'address';
         break;
       case 'Password':
         fieldKey = 'password';
@@ -212,17 +214,18 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: onEdit,
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+          if (label != 'Email')
+            GestureDetector(
+              onTap: onEdit,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.arrow_forward_ios, color: Color(0xFF141414), size: 20),
               ),
-              child: const Icon(Icons.edit, color: Color(0xFF141414), size: 20),
             ),
-          ),
         ],
       ),
     );
