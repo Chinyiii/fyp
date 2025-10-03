@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/AppFirstPage.dart';
 import 'package:fyp/Customer/AboutPage.dart';
+import 'package:fyp/Customer/ChangePasswordPage.dart';
 import 'package:fyp/Customer/AddEditAddressPage.dart';
 import 'package:fyp/Customer/AddressBookPage.dart';
 import 'package:fyp/Customer/BrandsPage.dart';
@@ -116,6 +117,7 @@ class MyApp extends StatelessWidget {
         '/search': (context) => const SearchPage(),
         '/settings': (context) => SettingsPage(),
         '/address-book': (context) => const AddressBookPage(),
+        '/change-password': (context) => const ChangePasswordPage(),
       },
     );
   }
