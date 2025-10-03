@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panorama/panorama.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -11,6 +12,7 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   String _selectedSize = '9';
+  bool _is360View = false;
 
   final List<String> _sizes = ['7', '8', '9', '10', '11', '12'];
 
@@ -50,381 +52,357 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAFAFA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF141414),
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
         title: const Text(
           'Sneaker Details',
           style: TextStyle(
             fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: Color(0xFF141414),
+            fontWeight: FontWeight.w800,
+            fontSize: 22,
+            color: Color(0xFF0A0A0A),
+            letterSpacing: -0.5,
           ),
         ),
-        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFF0A0A0A),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
-            Container(
+            SizedBox(
               height: 260,
               width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(widget.product['image']),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-            // Product Name
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-              child: Text(
-                widget.product['name'],
-                style: const TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 22,
-                  color: Color(0xFF141414),
-                ),
-              ),
-            ),
-
-            // Product Price
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Text(
-                widget.product['price'],
-                style: const TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: Color(0xFF141414),
-                ),
-              ),
-            ),
-
-            // Product Description
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: const Text(
-                'The Air Max 90 stays true to its roots with the iconic Waffle sole, stitched overlays and classic TPU accents. Fresh colors give a modern look while Max Air cushioning adds comfort to your journey.',
-                style: TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Color(0xFF141414),
-                  height: 1.5,
-                ),
-              ),
-            ),
-
-            // Size Selection
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: const Text(
-                'Size',
-                style: TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                  color: Color(0xFF141414),
-                ),
-              ),
-            ),
-
-            Container(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-              child: Wrap(
-                spacing: 12,
-                children: _sizes.map((size) {
-                  final isSelected = _selectedSize == size;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedSize = size;
-                      });
-                    },
-                    child: Container(
-                      width: 48,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFF141414)
-                            : const Color(0xFFEDEDED),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Center(
-                        child: Text(
-                          size,
-                          style: TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: isSelected
-                                ? Colors.white
-                                : const Color(0xFF141414),
-                          ),
-                        ),
+              child: Stack(
+                children: [
+                  if (!_is360View)
+                    Image.network(
+                      widget.product['image'],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  if (_is360View)
+                    Panorama(
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=1024&h=512&fit=crop',
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            // Ratings & Reviews Header
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: const Text(
-                'Ratings & Reviews',
-                style: TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                  color: Color(0xFF141414),
-                ),
-              ),
-            ),
-
-            // Ratings Overview
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Overall Rating
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '4.5',
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 36,
-                          color: Color(0xFF141414),
-                        ),
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _is360View = !_is360View;
+                        });
+                      },
+                      icon: Icon(
+                        _is360View ? Icons.image_outlined : Icons.threesixty_outlined,
+                        color: Colors.white,
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: List.generate(5, (index) {
-                          return Container(
-                            margin: const EdgeInsets.only(right: 2),
-                            child: const Icon(
-                              Icons.star,
-                              color: Colors.black,
-                              size: 18,
-                            ),
-                          );
-                        }),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black.withOpacity(0.5),
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        '123 reviews',
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Color(0xFF141414),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 32),
-
-                  // Rating Distribution
-                  Expanded(
-                    child: Column(
-                      children: _ratingDistribution.entries.map((entry) {
-                        final rating = entry.key;
-                        final percentage = entry.value;
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 16,
-                                child: Text(
-                                  rating,
-                                  style: const TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Color(0xFF141414),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Container(
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFDBDBDB),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: FractionallySizedBox(
-                                    alignment: Alignment.centerLeft,
-                                    widthFactor: percentage / 100,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              SizedBox(
-                                width: 30,
-                                child: Text(
-                                  '$percentage%',
-                                  style: const TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Color(0xFF737373),
-                                  ),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ],
               ),
             ),
-
-            // Customer Reviews
-            Container(
-              padding: const EdgeInsets.all(16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
-                children: _reviews.map((review) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 32),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            // Profile Picture
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                  image: NetworkImage(review['avatar']),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            // Name and Date
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review['name'],
-                                    style: const TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      color: Color(0xFF141414),
-                                    ),
-                                  ),
-                                  Text(
-                                    review['date'],
-                                    style: const TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Color(0xFF737373),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        // Star Rating
-                        Row(
-                          children: List.generate(5, (index) {
-                            final isFilled = index < review['rating'];
-                            return Container(
-                              margin: const EdgeInsets.only(right: 2),
-                              child: Icon(
-                                Icons.star,
-                                color: isFilled
-                                    ? Colors.black
-                                    : const Color(0xFFC2C2C2),
-                                size: 20,
-                              ),
-                            );
-                          }),
-                        ),
-                        const SizedBox(height: 12),
-                        // Review Text
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            review['comment'],
-                            style: const TextStyle(
-                              fontFamily: 'Plus Jakarta Sans',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Color(0xFF141414),
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.product['name'],
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 28,
+                      color: Color(0xFF0A0A0A),
                     ),
-                  );
-                }).toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.product['price'],
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                      color: Color(0xFF0A0A0A),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'The Air Max 90 stays true to its roots with the iconic Waffle sole, stitched overlays and classic TPU accents. Fresh colors give a modern look while Max Air cushioning adds comfort to your journey.',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: Color(0xFF757575),
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            // Bottom spacing for action buttons
-            const SizedBox(height: 100),
+            const SizedBox(height: 16),
+            _buildSizeSelection(),
+            const SizedBox(height: 32),
+            _buildRatingsAndReviews(),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFFAFAFA),
-          border: Border(top: BorderSide(color: Color(0xFFEDEDED), width: 1)),
+      bottomNavigationBar: _buildBottomButtons(),
+    );
+  }
+
+  Widget _buildSizeSelection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            'Size',
+            style: TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: Color(0xFF141414),
+            ),
+          ),
         ),
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                // AR Try On Button
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      // TODO: Implement AR Try On functionality
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 48,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: _sizes.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final size = _sizes[index];
+              final isSelected = _selectedSize == size;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedSize = size;
+                  });
+                },
+                child: Container(
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: isSelected ? const Color(0xFF0A0A0A) : Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected ? const Color(0xFF0A0A0A) : const Color(0xFFE0E0E0),
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      size,
+                      style: TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: isSelected ? Colors.white : const Color(0xFF0A0A0A),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRatingsAndReviews() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Ratings & Reviews',
+            style: TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: Color(0xFF141414),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '4.5',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 48,
+                      color: Color(0xFF0A0A0A),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: List.generate(5, (index) {
+                      return const Icon(Icons.star, color: Colors.black, size: 20);
+                    }),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '123 reviews',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Color(0xFF757575),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 32),
+              Expanded(
+                child: Column(
+                  children: _ratingDistribution.entries.map((entry) {
+                    final rating = entry.key;
+                    final percentage = entry.value;
+                    return Row(
+                      children: [
+                        Text(
+                          rating,
+                          style: const TextStyle(
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: Color(0xFF757575),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: percentage / 100,
+                            backgroundColor: const Color(0xFFE0E0E0),
+                            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF0A0A0A)),
+                            minHeight: 8,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
+          ..._reviews.map((review) => _buildReviewItem(review)).toList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewItem(Map<String, dynamic> review) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(review['avatar']),
+              ),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    review['name'],
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: Color(0xFF0A0A0A),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    review['date'],
+                    style: const TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Color(0xFF757575),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Row(
+                children: List.generate(5, (index) {
+                  final isFilled = index < review['rating'];
+                  return Icon(
+                    isFilled ? Icons.star : Icons.star_border,
+                    color: isFilled ? Colors.black : const Color(0xFFC2C2C2),
+                    size: 16,
+                  );
+                }),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            review['comment'],
+            style: const TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+              color: Color(0xFF757575),
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomButtons() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: OutlinedButton(
+                    onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('AR Try On feature coming soon!'),
@@ -432,56 +410,52 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       );
                     },
-                    child: Container(
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEDEDED),
-                        borderRadius: BorderRadius.circular(24),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xFFE0E0E0), width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Center(
-                        child: Text(
-                          'AR Try On',
-                          style: TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: Color(0xFF141414),
-                          ),
-                        ),
+                    ),
+                    child: const Text(
+                      'AR Try On',
+                      style: TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Color(0xFF0A0A0A),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                // Add to Cart Button
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Navigate to cart page
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
                       Navigator.pushNamed(context, '/cart');
                     },
-                    child: Container(
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(24),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0A0A0A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Center(
-                        child: Text(
-                          'Add to Cart',
-                          style: TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: Color(0xFFFAFAFA),
-                          ),
-                        ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Add to Cart',
+                      style: TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
