@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:panorama_viewer/panorama_viewer.dart';
+import 'package:provider/provider.dart';
+import 'package:fyp/services/WishlistService.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -47,6 +49,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistService = Provider.of<WishlistService>(context);
+    final isInWishlist = wishlistService.isInWishlist(widget.product);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
@@ -70,6 +75,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (isInWishlist) {
+                wishlistService.removeFromWishlist(widget.product);
+              } else {
+                wishlistService.addToWishlist(widget.product);
+              }
+            },
+            icon: Icon(
+              isInWishlist ? Icons.favorite : Icons.favorite_border,
+              color: isInWishlist ? Colors.red : const Color(0xFF0A0A0A),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 8),

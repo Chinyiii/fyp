@@ -26,9 +26,20 @@ import 'package:fyp/Customer/SettingsPage.dart';
 import 'package:fyp/Customer/WishlistPage.dart';
 import 'package:fyp/Login/LoginPage.dart';
 import 'package:fyp/Login/RegisterPage.dart';
+import 'package:provider/provider.dart';
+import 'package:fyp/services/CartService.dart';
+import 'package:fyp/services/WishlistService.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CartService()),
+        ChangeNotifierProvider(create: (context) => WishlistService()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

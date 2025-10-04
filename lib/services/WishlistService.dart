@@ -18,4 +18,9 @@ class WishlistService extends ChangeNotifier {
   bool isInWishlist(Map<String, dynamic> product) {
     return _wishlist.any((item) => item['name'] == product['name']);
   }
+
+  void clearWishlist() {
+    _wishlist.clear();
+    notifyListeners();
+  }
 }

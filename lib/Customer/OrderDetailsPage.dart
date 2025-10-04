@@ -18,42 +18,39 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAFAFA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF141414),
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
         title: const Text(
           'Order Details',
           style: TextStyle(
             fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: Color(0xFF141414),
+            fontWeight: FontWeight.w800,
+            fontSize: 22,
+            color: Color(0xFF0A0A0A),
+            letterSpacing: -0.5,
           ),
         ),
-        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFF0A0A0A),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Order Header
+            const SizedBox(height: 8),
             _buildOrderHeader(),
-
-            // Product Details
+            const SizedBox(height: 16),
             _buildProductDetails(),
-
-            // Order Information Sections
+            const SizedBox(height: 24),
+            _buildOrderTimeline(),
+            const SizedBox(height: 24),
             _buildOrderInfoSections(),
-
-            // Bottom spacing for action buttons
-            const SizedBox(height: 100),
+            const SizedBox(height: 120),
           ],
         ),
       ),
@@ -63,87 +60,158 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
   Widget _buildOrderHeader() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1,
+        ),
+      ),
+      child: Row(
         children: [
-          // Order placed label
-          const Text(
-            'Order placed',
-            style: TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: Color(0xFF141414),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.receipt_long_outlined,
+              color: Color(0xFF0A0A0A),
+              size: 24,
             ),
           ),
-          const SizedBox(height: 4),
-
-          // Order date and number
-          Text(
-            '${widget.order['date']} • Order #${widget.order['orderNumber']}',
-            style: const TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: Color(0xFF737373),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Order #${widget.order['orderNumber']}',
+                  style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Color(0xFF0A0A0A),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Placed on ${widget.order['date']}',
+                  style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Color(0xFF757575),
+                  ),
+                ),
+              ],
             ),
           ),
+          _buildStatusBadge(widget.order['status'] ?? 'Processing'),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge(String status) {
+    Color backgroundColor;
+    Color textColor;
+
+    switch (status) {
+      case 'Completed':
+        backgroundColor = const Color(0xFF0A0A0A);
+        textColor = Colors.white;
+        break;
+      case 'Cancelled':
+        backgroundColor = const Color(0xFFF5F5F5);
+        textColor = Colors.red;
+        break;
+      default:
+        backgroundColor = const Color(0xFFF5F5F5);
+        textColor = const Color(0xFF0A0A0A);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        status,
+        style: TextStyle(
+          fontFamily: 'Plus Jakarta Sans',
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+          color: textColor,
+        ),
       ),
     );
   }
 
   Widget _buildProductDetails() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
-          // Product Image
           Container(
-            width: 70,
-            height: 70,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: NetworkImage(widget.order['image']),
+              borderRadius: BorderRadius.circular(12),
+              color: const Color(0xFFF8F8F8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                widget.order['image'],
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(width: 16),
-
-          // Product Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Product Name
                 Text(
                   widget.order['productName'] ?? 'Air Max 90',
                   style: const TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w700,
                     fontSize: 16,
-                    color: Color(0xFF141414),
+                    color: Color(0xFF0A0A0A),
                   ),
                 ),
-                const SizedBox(height: 4),
-
-                // Product Details
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    _buildInfoChip('Size ${widget.order['size'] ?? '9'}'),
+                    const SizedBox(width: 8),
+                    _buildInfoChip('Qty ${widget.order['quantity'] ?? '1'}'),
+                  ],
+                ),
+                const SizedBox(height: 8),
                 Text(
-                  'Size: ${widget.order['size'] ?? '9'} • Quantity: ${widget.order['quantity'] ?? '1'} • Price: RM${(widget.order['price'] ?? 120.00).toStringAsFixed(2)}',
+                  'RM ${(widget.order['price'] ?? 120.00).toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Color(0xFF737373),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    color: Color(0xFF0A0A0A),
                   ),
                 ),
               ],
@@ -154,150 +222,250 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
     );
   }
 
-  Widget _buildOrderInfoSections() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Estimated Delivery
-        _buildInfoSection(
-          label: 'Estimated Delivery',
-          value: widget.order['estimatedDelivery'] ?? 'July 25, 2025',
+  Widget _buildInfoChip(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Plus Jakarta Sans',
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
+          color: Color(0xFF757575),
         ),
-
-        // Shipping Address
-        _buildInfoSection(
-          label: 'Shipping Address',
-          value: widget.order['shippingAddress'] ?? '123, Jalan Test',
-        ),
-
-        // Payment Method
-        _buildPaymentMethodSection(),
-      ],
+      ),
     );
   }
 
-  Widget _buildInfoSection({required String label, required String value}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Label
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: Color(0xFF141414),
-            ),
-          ),
+  Widget _buildOrderTimeline() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1,
         ),
-
-        // Value
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w400,
-              fontSize: 16,
-              color: Color(0xFF141414),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPaymentMethodSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Payment Method Label
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: const Text(
-            'Payment Method',
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Order Timeline',
             style: TextStyle(
               fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: Color(0xFF141414),
+              fontSize: 16,
+              color: Color(0xFF0A0A0A),
             ),
           ),
-        ),
-
-        // Payment Method Card
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
+          const SizedBox(height: 20),
+          _buildTimelineItem(
+            Icons.check_circle,
+            'Order Placed',
+            widget.order['date'] ?? 'July 20, 2025',
+            true,
           ),
-          child: Row(
-            children: [
-              // Payment Icon
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEDEDED),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.credit_card,
-                  color: Color(0xFF141414),
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 16),
+          _buildTimelineItem(
+            Icons.inventory_2_outlined,
+            'Processing',
+            'July 21, 2025',
+            true,
+          ),
+          _buildTimelineItem(
+            Icons.local_shipping_outlined,
+            'Shipped',
+            'Estimated: July 23, 2025',
+            false,
+          ),
+          _buildTimelineItem(
+            Icons.home_outlined,
+            'Delivered',
+            widget.order['estimatedDelivery'] ?? 'July 25, 2025',
+            false,
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
 
-              // Payment Method Info
-              const Expanded(
-                child: Text(
-                  'Debit Card',
+  Widget _buildTimelineItem(
+      IconData icon,
+      String title,
+      String date,
+      bool isCompleted, {
+        bool isLast = false,
+      }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isCompleted ? const Color(0xFF0A0A0A) : const Color(0xFFF5F5F5),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: isCompleted ? Colors.white : const Color(0xFF9E9E9E),
+                size: 20,
+              ),
+            ),
+            if (!isLast)
+              Container(
+                width: 2,
+                height: 40,
+                color: isCompleted ? const Color(0xFF0A0A0A) : const Color(0xFFE0E0E0),
+              ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xFF141414),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: isCompleted ? const Color(0xFF0A0A0A) : const Color(0xFF9E9E9E),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 4),
+                Text(
+                  date,
+                  style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: Color(0xFF757575),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-   Widget _buildActionButtons() {
+  Widget _buildOrderInfoSections() {
+    return Column(
+      children: [
+        _buildInfoCard(
+          'Shipping Address',
+          widget.order['shippingAddress'] ?? '123, Jalan Test',
+          Icons.location_on_outlined,
+        ),
+        const SizedBox(height: 12),
+        _buildInfoCard(
+          'Payment Method',
+          'Debit Card',
+          Icons.credit_card_outlined,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoCard(String label, String value, IconData icon) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFFAFAFA),
-        border: Border(top: BorderSide(color: Color(0xFFEDEDED), width: 1)),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: const Color(0xFF0A0A0A),
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: Color(0xFF757575),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Color(0xFF0A0A0A),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
+          ),
+        ],
       ),
       child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Track Package Button
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    _showTrackPackageDialog();
-                  },
+                  onPressed: _showTrackPackageDialog,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFF0A0A0A),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     elevation: 0,
                   ),
@@ -307,72 +475,75 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
-                      color: Color(0xFFFAFAFA),
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-
               const SizedBox(height: 12),
-
-              // Cancel Order Button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _showCancelOrderDialog();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEDEDED),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Cancel Order',
-                    style: TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: Color(0xFF141414),
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.order['status'] == 'Completed')
-                const SizedBox(height: 12),
-              if (widget.order['status'] == 'Completed')
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RatingAndReviewPage(order: widget.order),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 56,
+                      child: OutlinedButton(
+                        onPressed: _showCancelOrderDialog,
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Color(0xFFE0E0E0),
+                            width: 1,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          'Cancel Order',
+                          style: TextStyle(
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Color(0xFF757575),
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Rate and Review',
-                    style: TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: Color(0xFFFAFAFA),
                     ),
                   ),
-                ),
+                  if (widget.order['status'] == 'Completed') ...[
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: SizedBox(
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RatingAndReviewPage(order: widget.order),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0A0A0A),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            'Review',
+                            style: TextStyle(
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ],
           ),
@@ -388,36 +559,35 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
           ),
-          title: const Text(
-            'Track Package',
-            style: TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
+          contentPadding: const EdgeInsets.all(32),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.local_shipping,
-                size: 64,
-                color: Color(0xFF1A1A1A),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Your package is on its way!',
-                style: const TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xFF1A1A1A),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF5F5F5),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.local_shipping_outlined,
+                  size: 48,
+                  color: Color(0xFF0A0A0A),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 24),
+              const Text(
+                'Package on the way!',
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  color: Color(0xFF0A0A0A),
+                ),
+              ),
+              const SizedBox(height: 12),
               Text(
                 'Order #${widget.order['orderNumber']}',
                 style: const TextStyle(
@@ -427,33 +597,31 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   color: Color(0xFF757575),
                 ),
               ),
-            ],
-          ),
-          actions: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1A1A1A),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0A0A0A),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'OK',
-                  style: TextStyle(
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Colors.white,
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -466,83 +634,102 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
           ),
-          title: const Text(
-            'Cancel Order',
-            style: TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
-          content: const Text(
-            'Are you sure you want to cancel this order? This action cannot be undone.',
-            style: TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w400,
-              fontSize: 16,
-              color: Color(0xFF757575),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Keep Order',
-                      style: TextStyle(
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                  ),
+          contentPadding: const EdgeInsets.all(32),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Cancel Order?',
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  color: Color(0xFF0A0A0A),
                 ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Order has been cancelled'),
-                          backgroundColor: Color(0xFF1A1A1A),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Are you sure you want to cancel this order? This action cannot be undone.',
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                  color: Color(0xFF757575),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Color(0xFFE0E0E0),
+                            width: 1,
                           ),
-                          margin: EdgeInsets.all(16),
-                          duration: Duration(seconds: 2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1A1A1A),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Cancel Order',
-                      style: TextStyle(
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Colors.white,
+                        child: const Text(
+                          'Keep',
+                          style: TextStyle(
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Color(0xFF757575),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Order cancelled'),
+                              backgroundColor: const Color(0xFF0A0A0A),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              margin: const EdgeInsets.all(16),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );

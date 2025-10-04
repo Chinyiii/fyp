@@ -31,9 +31,9 @@ class BottomNavBar extends StatelessWidget {
             children: [
               _buildNavItem(
                 context,
-                Icons.search_outlined,
-                Icons.search,
-                'Search',
+                Icons.directions_walk,
+                Icons.directions_walk,
+                'Sneaker',
                 '/products',
                 currentRoute == '/products',
               ),
