@@ -321,11 +321,6 @@ class _CartPageState extends State<CartPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              IconButton(
-                onPressed: () => removeItem(index),
-                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
-              ),
-              const SizedBox(height: 8),
               Row(
                 children: [
                   _buildQuantityButton(
@@ -350,6 +345,11 @@ class _CartPageState extends State<CartPage> {
                     onTap: () => updateQuantity(index, item['quantity'] + 1),
                   ),
                 ],
+              ),
+              const SizedBox(height: 8),
+              IconButton(
+                onPressed: () => removeItem(index),
+                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
               ),
             ],
           ),

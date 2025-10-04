@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:panorama/panorama.dart';
+import 'package:panorama_viewer/panorama_viewer.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -88,7 +88,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       width: double.infinity,
                     ),
                   if (_is360View)
-                    Panorama(
+                    PanoramaViewer(
                       child: Image.network(
                         'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=1024&h=512&fit=crop',
                       ),
